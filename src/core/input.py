@@ -12,7 +12,14 @@ import requests
 
 
 def get_abcs(source):
-    """Returns a list of strings, each string is an ABC tune."""
+    """Returns a list of strings, each string is an ABC tune.
+
+    `source` will be resolved in this order:
+        - First try to read files from source as a directory.
+        - If it's not a dir (but it is a pathlib.Path) try to read text.
+        - If not a Path, try to GET text from source as URL (or list of URLs).
+        - If them all fail, print the exception and return None.
+    """
     try:
         files = list(source.iterdir())
         abcs = [f.read_text().strip() for f in files]
@@ -50,22 +57,16 @@ def remove_abc_comments(abc_string):
     return '\n'.join([l for l in lines if l != ''])
 
 
-def get_dataset(source, remove_comments=True, normalize_x=False):
+def get_dataset(abcs, remove_comments=True, normalize_x=False):
     """Returns a list of tuples (encoded_abc_text, labels_for_each_timestep)
-    for each ABC tune in source, and a token-to-index dict.
-    `source` can be a pathlib.Path object, or a str representing a URL.
-    The source will be resolved in this order:
-        - First try to read files from source as a directory.
-        - If it's not a dir (but it is a pathlib.Path) try to read text.
-        - If not a Path, try to GET text from source as URL (or list of URLs).
-        - If them all fail, print the exception and return None.
+    for each element in `abcs`, and a token-to-index dict.
+    `abcs` must be a list of strings, each string representing an ABC tune..
 
     Note for remove_comments: There's a special type of comment,
         "%%MIDI program ##". Depending on the program number, the resulting
         sound changes when converted to MIDI. If there's no such comment it
         sounds like "%%MIDI program 0" (piano).
     """
-    abcs = get_abcs(source)
     if remove_comments:
         abcs = [remove_abc_comments(abc) for abc in abcs]
 
