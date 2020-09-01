@@ -1,4 +1,5 @@
-FROM tensorflow/tensorflow:1.15.2-gpu-py3-jupyter
+ARG MAYBE_GPU
+FROM tensorflow/tensorflow:1.15.2${MAYBE_GPU}-py3-jupyter
 
 # install abcMIDI.
 ADD http://abc.sourceforge.net/abcMIDI/original/abcMIDI.tar.gz /
@@ -18,7 +19,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade \
 
 # install packages to play MIDI in notebooks.
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt update -qqq && apt install -qqq --no-install-recommends -y fluidsynth
+RUN apt update -q && apt install -qq --no-install-recommends -y fluidsynth
 RUN python3 -m pip install --no-cache-dir --upgrade \
     pyFluidSynth==1.2.5
 
