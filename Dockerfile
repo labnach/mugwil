@@ -26,4 +26,4 @@ RUN python3 -m pip install --no-cache-dir --upgrade \
 
 RUN mkdir /src
 ENV PYTHONPATH /src
-CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/src --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/src --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token=''"]
