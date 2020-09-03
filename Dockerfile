@@ -15,6 +15,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade \
     pandas==1.1.1 \
     plotly==4.9.0 \
     pretty-midi==0.2.8 \
+    pypianoroll==0.5.3 \
     requests==2.24.0
 
 # install packages to play MIDI in notebooks.
